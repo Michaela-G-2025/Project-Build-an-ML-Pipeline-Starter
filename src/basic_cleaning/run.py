@@ -14,12 +14,13 @@ logger = logging.getLogger()
 # DO NOT MODIFY
 def go(args):
 
-    run = wandb.init(job_type="basic_cleaning")
+    #run = wandb.init(job_type="basic_cleaning")
+    run = wandb.init(job_type="basic_cleaning", project="nyc_airbnb", group="cleaning", save_code=True)
     run.config.update(args)
 
     # Download input artifact. This will also log that this script is using this
     
-    run = wandb.init(project="nyc_airbnb", group="cleaning", save_code=True)
+    #run = wandb.init(project="nyc_airbnb", group="cleaning", save_code=True)
     artifact_local_path = run.use_artifact(args.input_artifact).file()
     df = pd.read_csv(artifact_local_path)
     # Drop outliers
@@ -42,6 +43,7 @@ def go(args):
      description=args.output_description,
  )
     artifact.add_file("clean_sample.csv")
+    artifact.add_tag("reference")  # <-- ADD THIS LINE to ensure the 'reference' tag is applied
     run.log_artifact(artifact)
 
 

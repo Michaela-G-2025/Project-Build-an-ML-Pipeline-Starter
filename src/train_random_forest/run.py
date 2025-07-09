@@ -100,7 +100,7 @@ def go(args):
     signature = infer_signature(input_example, y_pred)
     mlflow.sklearn.save_model(
         sk_pipe,
-        path=("random_forest_dir"),
+        path="random_forest_dir",
         signature = signature,
         input_example = input_example
     )
@@ -232,7 +232,7 @@ def get_inference_pipeline(rf_config, max_tfidf_features):
     sk_pipe = Pipeline(
         steps =[
             ("preprocessor", preprocessor),
-            ("random_forrest", random_forest)
+            ("random_forest", random_forest)
         ]
     )
 

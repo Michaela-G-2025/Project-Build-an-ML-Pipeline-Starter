@@ -96,7 +96,17 @@ def go(args):
     ######################################
     # Save the sk_pipe pipeline as a mlflow.sklearn model in the directory "random_forest_dir"
     # HINT: use mlflow.sklearn.save_model
+    # Handle potential NaNs in 'name' or other string columns for infer_signature
     input_example = X_train.iloc[:5]
+    input_example = input_example.copy()
+    if 'name' in input_example.columns:
+        # Fill NaN with an empty string for the purpose of signature inference
+        input_example['name'] = input_example['name'].fillna('').astype(str)
+
+    # Do similar checks for last_review
+    if 'last_review' in input_example.columns:
+        input_example['last_review'] = input_example['last_review'].fillna('2010-01-01').astype(str)
+
     signature = infer_signature(input_example, y_pred)
     mlflow.sklearn.save_model(
         sk_pipe,
